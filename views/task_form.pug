@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1= title
+
+    - const actionUrl = task? `/tasks/${task.id}/update` : "/tasks"
+    form(action=actionUrl method="POST")
+        div.form-group
+            label(for="title") 제목 :
+            input(type="text" id="title" name="title" value=task? task.title : '' required)
+
+        div.form-group
+            label(for="dueDate") 마감 기한 :
+            input(type="date" id="dueDate" name="dueDate" value=task && task.dueDate? new Date(task.dueDate).toISOString().split('T'): '')
+
+        if task
+            div.form-group
+                label(for="completed") 완료 여부 :
+                input(type="checkbox" id="completed" name="completed" checked=task.completed)
+
+        button(type="submit") Save Task
+
+    if task
+        a(href="/") Cancel

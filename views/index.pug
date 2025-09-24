@@ -1,0 +1,25 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  a(href="/tasks/new" class="btn-new") 할 일 추가하기
+
+  ul.task-list
+      if tasks.length
+          each task in tasks
+              li.task-item(class={completed: task.completed})
+                div.task-info
+                    form(action=`/tasks/${task.id}/toggle` method="POST" class="toggle-form")
+                        input(type="checkbox" checked=task.completed onchange="this.form.submit()")
+                    div
+                        span.task-title= task.title
+                        if task.dueDate
+                            span.task-due-date  (마감: #{new Date(task.dueDate).toLocaleDateString()})
+                    div.task-actions
+                        a(href=`/tasks/${task.id}/edit`) 수정
+                        form(action=`/tasks/${task.id}/delete` method="POST" style="display: inline;" onsubmit="return confirm('정말 삭제하시겠습니까?');")
+                            button(type="submit") 삭제
+      else
+          p No tasks yet. Create one!
